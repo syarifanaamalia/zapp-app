@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         "/forgot": (context) => ForgotPage(),
         "/verify": (context) => VerifyPage(),
         "/reset": (context) =>  ResetPage(),
-        "/homepage": (context) => HomePage()
+        // "/homepage": (context) => HomePage()
       },
     );
   }

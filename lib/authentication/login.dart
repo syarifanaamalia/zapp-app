@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:zapp/auth/auth_gate.dart';
 import '../components/layout.dart';
 
 class LoginPage extends StatefulWidget {
@@ -55,12 +56,7 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       if (!mounted) return;
-
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        '/homepage',
-            (route) => false,
-      );
+      Navigator.of(context).popUntil((route) => route.isFirst);
     } on AuthException catch (e) {
       setState(() => errorText = e.message);
     } catch (_) {

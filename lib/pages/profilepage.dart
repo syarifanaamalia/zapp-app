@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'account_detail.dart';
 import 'contact_us.dart';
 
 /// ======================================================
 /// PROFILE PAGE
 /// ======================================================
+
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
@@ -15,6 +18,54 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   bool notificationEnabled = true;
   static const Color primaryBlue = Color(0xFF053886);
+
+  void _showLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          title: const Text(
+            'Log out',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: const Text(
+            'Are you sure you want to log out?',
+          ),
+          actions: [
+            TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.grey,
+              ),
+              onPressed: () => Navigator.pop(dialogContext),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.pop(dialogContext);
+
+                await Supabase.instance.client.auth.signOut();
+
+                if (!mounted) return;
+
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: primaryBlue,
+              ),
+              child: const Text(
+                'Log out',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,8 +169,8 @@ class _ProfilePageState extends State<ProfilePage> {
             _menuItem(
               icon: Icons.logout,
               title: 'Log out',
-              onTap: () {},
               isLogout: true,
+              onTap: _showLogoutDialog,
             ),
           ],
         ),
